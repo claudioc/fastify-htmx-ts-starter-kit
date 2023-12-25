@@ -1,0 +1,79 @@
+{
+  "name": "fastify-htmx-ts-starter-kit",
+  "version": "1.0.0",
+  "description": "Opinionated, no nonsense starter kit for a simple Fastify API + HTMX application",
+  "main": "./dist/app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudioc/fastify-htmx-ts-starter-kit.git"
+  },
+  "author": "Claudio Cicali <claudio.cicali@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/claudioc/fastify-htmx-ts-starter-kit/issues"
+  },
+  "scripts": {
+    "dev:build": "npm run clean && tsc -b ./client ./server",
+    "dev:watch": "tsc -b ./client ./server --preserveWatchOutput -w",
+    "dev:start": "nodemon -w ./dist/server ./dist/server/app.js",
+    "dev": "npm run dev:build && conc -r -k 'npm:dev:start' 'npm:dev:watch'",
+    "clean": "rm -rf ./dist",
+    "build": "npm run lint && npm run dev:build",
+    "postinstall": "npm run build",
+    "lint": "eslint . --ext .ts",
+    "prestart": "NODE_ENV=production npm run build",
+    "start": "NODE_ENV=production node ./dist/server/app.js"
+  },
+  "nodemonConfig": {
+    "delay": 1500
+  },
+  "prettier": {
+    "printWidth": 80,
+    "singleQuote": true
+  },
+  "eslintConfig": {
+    "ignorePatterns": [
+      "**/*/*.ejs",
+      "**/*/*.json"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module",
+      "project": [
+        "./server/tsconfig.json",
+        "./client/tsconfig.json"
+      ]
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "import"
+    ]
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^20.10.2",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.55.0",
+    "eslint-plugin-import": "^2.29.0",
+    "nodemon": "^3.0.2",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/static": "^6.12.0",
+    "@fastify/view": "^8.2.0",
+    "chota": "^0.9.2",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "fastify": "^4.25.1",
+    "htmx.org": "^1.9.9",
+    "pino-pretty": "^10.3.0"
+  }
+}

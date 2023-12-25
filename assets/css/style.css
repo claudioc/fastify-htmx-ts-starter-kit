@@ -1,0 +1,11 @@
+/* Chota documentation: https://jenil.github.io/chota/#docs */
+@import url(../vendor/chota.min.css);
+
+/* Chota overrides (dark mode) */
+:root {
+  --bg-color: #000;
+  --bg-secondary-color: #131316;
+  --font-color: #f5f5f5;
+  --color-grey: #ccc;
+  --color-darkGrey: #777;
+}

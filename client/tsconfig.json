@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es6",
+    /* You still need to use the '.js' extension in your import statements */
+    "module": "es6",
+    "lib": ["dom", "es6"],
+    "outDir": "../dist/client"
+  }
+}
