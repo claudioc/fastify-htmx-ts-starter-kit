@@ -1,17 +1,24 @@
 # Fastify + TypeScript + HTMX starter kit
 
-Motivation: **I am sick of React and frontend building and bundling issues. I just want to build staff**.
-
-The goal of this starter kit is to provide a slightly opinionated but super simple way to get started with a project that has some logic on the backend and some logic on the frontend. A typical use case could be a single page that fetches some information from a third-party API, but you also want to have a small backend where to keep your API keys and maybe a cache to avoid hitting a rate limit on those external APIs.
+The goal of this starter kit is to provide a slightly opinionated but super simple way to get started with a project that has some logic on the backend and some logic on the frontend. A typical use case could be a single web page that fetches some information from a third-party API, but you also want to have a small backend where to keep your API keys and maybe a cache to avoid hitting a rate limit on those external APIs.
 
 The kit contains:
-- A server ([Fastify](https://fastify.dev/) with some plugins)
-- A client (just TypeScript, no frameworks, which you can extend with your logic)
-- A demo micro application: reads the current server time and displays it in the browser, auto-refreshing every 30s (or manually)
-- Server side error handling
-- Linting
+- A server application ([Fastify](https://fastify.dev/) with some plugins)
+- A client application (no frameworks, just TypeScript)
+- A demo micro application using [HTMX](https://htmx.org/): reads the current server time and displays it in the browser, auto-refreshing every 30s (or manually)
+- Server side error handling (500s and 404s)
+- Linting (via eslint and some plugins)
 
-I have also created a (now deprecated) [similar starter kit](https://github.com/claudioc/node-htmx-ts-starter-kit/) using Express if you prefer that server.
+The kit does not contain:
+- a JavaScript bundler
+- Tests (but read at the end for some suggestions)
+- Deployment instructions
+- Sophisticated cache busting strategies for the client
+- `ts-node` because we can do without it
+
+Probably worth mentioning that I have also created a (now deprecated) [similar starter kit](https://github.com/claudioc/node-htmx-ts-starter-kit/) using Express if you prefer that server.
+
+At the time of writing, **Windows is probably not supported**.
 
 ## Tech stack
 - [Fastify](https://fastify.dev/)
@@ -19,42 +26,26 @@ I have also created a (now deprecated) [similar starter kit](https://github.com/
 - TypeScript
 - [HTMX](https://htmx.org/) for the frontend to speak to the backend
 - [Chota](https://jenil.github.io/chota/) framework for the CSS, because it's small and cute
+- [Helmet](https://github.com/fastify/fastify-helmet) for security
+- [Static](https://github.com/fastify/fastify-static) for serving static assets
 
-I am not even using `ts-node` because it's not needed for a small project.
-
-### Additional plugins:
-- Helmet for security
-- Static for serving static assets
-
-### Additional tools provided:
+### Additional tools provided
 - concurrently
 - nodemon
 - dotenv
-- eslint with ts support (extends just the recommended rule set)
 - prettier and a bare-bone config
 - client's and server's own tsconfig which extends a base one
 
 ### Bonus
 - There is an example of how to write a HTMX extension
-- Configurations are all in the package.json
-
-### Suggested Visual Studio Code extensions
-- EJS language support
-- Prettier
-- Pretty TypeScript Errors
-
-## Project structure
-
-- `server/app.ts` contains just the bare-bone bootstrap code for the server
-- `server/lib` contains any additional server module: `bootstrap.ts` is the module setting up Fastify and its plugins, `router.ts` contains the routes definition and the error handling, `assets.ts` is used to generate a cache proof name for the assets. There are also some `constants.ts`
-- `server/views` contains the view templates in EJS format (HTML + embedded JS). EJS doesn't have the concept of "layouts" or "slots", so in our case, we build each "full page" using partials: header + body + footer. If your app grows in complexity you may want to reconsider this design choice and use a layout-based template system
-- `client/app.ts` contains just some code that it's run when the page is loaded in the browser
-- `client/lib/tools.ts` is just used as an example of natively including a js module at runtime
-- `assets` contains js, css, and vendor files. Keep in mind that the js assets are symlinked from the `dist` directory. All the assets are mounted under the `/a` virtual folder
-
-Since this project doesn't use `ts-node`, your app is run directly from the `dist` folder (check the script in package.json to understand how) where the view templates are not copied (because they do not require compilation).
+- Configurations are all in the package.json to remove clutter
 
 ## Try it
+
+Some options:
+
+- Download the latest archive from [Github releases](https://github.com/claudioc/fastify-htmx-ts-starter-kit/releases) or from the "Code" button in the repository main page
+- Clone the repo, and then `rm -rf` its `.git` directory (github doesn't support `git archive` and git doesn't have a `export` command like svn does)
 
 Note that it doesn't work on Windows out-of-the-box (makes use of symlinks and bash).
 
@@ -64,22 +55,35 @@ Note that it doesn't work on Windows out-of-the-box (makes use of symlinks and b
 
 You also have `npm lint`, `npm build` and of course `npm start` (for production).
 
-## Use it in your project
+**This project uses ESLint and Prettier: don't forget to install/enable their extension in Visual Studio Code.**
 
-Some options:
+## Project structure
 
-- Download the latest archive from [Github releases](https://github.com/claudioc/fastify-htmx-ts-starter-kit/releases) or from the "Code" button in the repository main page
-- Clone the repo, and then `rm -rf` its `.git` directory (github doesn't support `git archive` and git doesn't have a `export` command like svn does)
+- `server/app.ts` contains just the bare-bone startup code for the server
+- `server/lib` contains any additional server module:
+  - `bootstrap.ts` is the module setting up Fastify and its plugins
+  - `router.ts` contains the routes definition and the error handling
+  - `assets.ts` is used to generate a cache proof name for the assets
+  - There are also some `constants.ts`
+- `server/views` contains the view templates in EJS format (HTML + embedded JS). EJS doesn't have the concept of "layouts" or "slots", so in our case, we build each "full page" using partials: header + body + footer. If your app grows in complexity you may want to reconsider this design choice and use a layout-based template system
+- `client/app.ts` contains just some code that it's run when the page is loaded in the browser
+- `client/lib/tools.ts` is just used as an example of natively including a js module at runtime
+- `assets` contains js, css, and vendor files. Keep in mind that the js assets are symlinked from the `dist` directory. All the assets are mounted under the `/a` virtual folder
 
-This project uses ESLint and Prettier: don't forget to install/enable their extension in Visual Studio Code.
-
-To not mess things up, we are not using "eslint-prettier" or similar, but you can try it if you want.
+Since this project doesn't use `ts-node`, your app is run directly from the `dist` folder (check the script in package.json to understand how) where the view templates are not copied, because they do not require compilation.
 
 ## Deployment
 
-This is on you. I own a small VPS and I run all my projects from there. Ideally, you want to run this process behind a reverse proxy where you also end your TLS connection. I use ngnix and letsencrypt for my tls certificates.
+This is on you. I own a small VPS and I run all my projects from there. I to run the server process behind a reverse proxy where I also end the TLS connection. I use ngnix and letsencrypt for my tls certificates. I find the guides from DigitalOcean extremely valuable for this kind of setup:
+- [How to set up a node.js application for production on ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-22-04)
+- [How To Secure Nginx with Let's Encrypt on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-22-04)
 
 If you have successfully deployed a project inherited from this kit, in some cloud, and you want to share the steps please open a PR!
+
+## Suggested Visual Studio Code extensions
+- EJS language support
+- Prettier
+- Pretty TypeScript Errors
 
 ## What is missing
 
