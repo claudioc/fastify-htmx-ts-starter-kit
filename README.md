@@ -1,29 +1,34 @@
-# Fastify + TypeScript + HTMX starter kit
+# Fastify + TypeScript + JSX + HTMX starter kit
 
-The goal of this starter kit is to provide a slightly opinionated but super simple way to get started with a project that has some logic on the backend and some logic on the frontend. A typical use case could be a single web page that fetches some information from a third-party API, but you also want to have a small backend where to keep your API keys and maybe a cache to avoid hitting a rate limit on those external APIs.
+This starter kit aims to offer an efficient approach for initiating projects with both backend and frontend logic. It's designed to utilize a modern tech stack while maintaining minimal dependencies for simplicity and effectiveness.
+
+This project renders all the HTML on the server (SSR), using JSX as the template language and HTMX to (progressively) enhance the frontend interactions. Let me clarify it once more: **JSX is only used on the server, not on the client. The client is NOT a React application**.
+
+ A typical use case could be a single web page that fetches some information from a third-party API, but you also want to have a small backend where to keep your API keys and maybe a cache to avoid hitting a rate limit on those external APIs.
 
 The kit contains:
-- A server application ([Fastify](https://fastify.dev/) with some plugins)
+- A server application based on [Fastify](https://fastify.dev/)
 - A client application (no frameworks, just TypeScript)
 - A demo micro application using [HTMX](https://htmx.org/): reads the current server time and displays it in the browser, auto-refreshing every 30s (or manually)
 - Server side error handling (500s and 404s)
 - Linting (via eslint and some plugins)
+- JSX rendering using just TS and [Preact](https://preactjs.com/)
 
-The kit does not contain:
-- a JavaScript bundler
+The kit does NOT contain:
+- a JavaScript or CSS bundler
 - Tests (but read at the end for some suggestions)
 - Deployment instructions
 - Sophisticated cache busting strategies for the client
 - `ts-node` because we can do without it
 
-Probably worth mentioning that I have also created a (now deprecated) [similar starter kit](https://github.com/claudioc/node-htmx-ts-starter-kit/) using Express if you prefer that server.
+Probably worth mentioning that I have also created a (now deprecated) [similar starter kit](https://github.com/claudioc/node-htmx-ts-starter-kit/) using Express and EJS (not JSX) if you prefer that server. I would suggest to not use it.
 
-At the time of writing, **Windows is probably not supported**.
+At the time of writing, **Windows has not been tested as a dev environment**.
 
 ## Tech stack
 - [Fastify](https://fastify.dev/)
-- [EJS](https://ejs.co/) templates
-- TypeScript
+- [JSX](https://react.dev/learn/writing-markup-with-jsx) templates
+- TypeScript everywhere
 - [HTMX](https://htmx.org/) for the frontend to speak to the backend
 - [Chota](https://jenil.github.io/chota/) framework for the CSS, because it's small and cute
 - [Helmet](https://github.com/fastify/fastify-helmet) for security
@@ -44,10 +49,8 @@ At the time of writing, **Windows is probably not supported**.
 
 Some options:
 
-- Download the latest archive from [Github releases](https://github.com/claudioc/fastify-htmx-ts-starter-kit/releases) or from the "Code" button in the repository main page
+- Download the latest archive from [Github releases](https://github.com/claudioc/fastify-htmx-ts-starter-kit/releases) or from the "Code" button on the repository main page
 - Clone the repo, and then `rm -rf` its `.git` directory (github doesn't support `git archive` and git doesn't have a `export` command like svn does)
-
-Note that it doesn't work on Windows out-of-the-box (makes use of symlinks and bash).
 
 - npm i
 - npm run dev
@@ -62,15 +65,16 @@ You also have `npm lint`, `npm build` and of course `npm start` (for production)
 - `server/app.ts` contains just the bare-bone startup code for the server
 - `server/lib` contains any additional server module:
   - `bootstrap.ts` is the module setting up Fastify and its plugins
-  - `router.ts` contains the routes definition and the error handling
+  - `jsxRender` is what makes it possible to use JSX with Fastify, as [explained in the original post](https://evertpot.com/jsx-template/)
+  - `router.tsx` contains the routes definition and the error handling
   - `assets.ts` is used to generate a cache proof name for the assets
   - There are also some `constants.ts`
-- `server/views` contains the view templates in EJS format (HTML + embedded JS). EJS doesn't have the concept of "layouts" or "slots", so in our case, we build each "full page" using partials: header + body + footer. If your app grows in complexity you may want to reconsider this design choice and use a layout-based template system
+- `server/views` contains the view templates in JSX format, mostly the Pages and the Components.
 - `client/app.ts` contains just some code that it's run when the page is loaded in the browser
 - `client/lib/tools.ts` is just used as an example of natively including a js module at runtime
 - `assets` contains js, css, and vendor files. Keep in mind that the js assets are symlinked from the `dist` directory. All the assets are mounted under the `/a` virtual folder
 
-Since this project doesn't use `ts-node`, your app is run directly from the `dist` folder (check the script in package.json to understand how) where the view templates are not copied, because they do not require compilation.
+Since this project doesn't use `ts-node`, your app is run directly from the `dist` folder (check the script in package.json to understand how).
 
 ## Deployment
 
@@ -80,16 +84,10 @@ This is on you. I own a small VPS and I run all my projects from there. I to run
 
 If you have successfully deployed a project inherited from this kit, in some cloud, and you want to share the steps please open a PR!
 
-## Suggested Visual Studio Code extensions
-- EJS language support
-- Prettier
-- Pretty TypeScript Errors
-
 ## What is missing
 
-- no cookie support, because we hate cookie banners
+- There is no cookie support, because we hate cookie banners
 - Assets are not tgz compressed because this should be the job of your reverse proxy
-- I use ejs for its simplicity but I don't like not having a type checking in the templates. It should be nice to use JSX, but the risk is to complicate things too much
 - Both server and client code reside in the same git repository, and they both share the same package.json and node_modules and that's OK for relatively small project, but you can also decide to move to a monorepo layout using something like [nx](https://nx.dev/) or [TurboRepo](https://turbo.build/) for managing it
 - Only the main client js module (app.js) is provided with a cache-bust parameter, whereas any imported module (as in `tools.js` in this project) is not, which means that they only rely to the cache settings of the static middleware. I will leave it up to you to decide if that's enough or if you want to add an additional build step to handle such cases
 

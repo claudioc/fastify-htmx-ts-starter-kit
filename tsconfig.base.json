@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules", "dist", "**/*.ejs"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Setting it to true, would create a tsconfig.tsbuildinfo file */
