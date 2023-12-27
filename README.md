@@ -1,4 +1,4 @@
-# Fastify + TypeScript + JSX + HTMX starter kit
+# Fastify + HTMX + TypeScript starter kit
 
 This starter kit aims to offer an efficient approach for initiating projects with both backend and frontend logic. It's designed to utilize a modern tech stack while maintaining minimal dependencies for simplicity and effectiveness.
 
@@ -25,6 +25,22 @@ Probably worth mentioning that I have also created a (now deprecated) [similar s
 
 At the time of writing, **Windows has not been tested as a dev environment**.
 
+## Install
+
+```sh
+npm create fastify-htmx-ts-app@latest my-app
+# or
+npx fastify-htmx-ts-app@latest my-app
+```
+
+After that, you have to install dependencies using your favourite package manager (i.e. `npm`) and run some commands:
+
+- npm i
+- npm run dev
+- open http://localhost:3000
+
+You also have `npm lint`, `npm build` and of course `npm start` (for production).
+
 ## Tech stack
 - [Fastify](https://fastify.dev/)
 - [JSX](https://react.dev/learn/writing-markup-with-jsx) templates
@@ -41,24 +57,11 @@ At the time of writing, **Windows has not been tested as a dev environment**.
 - prettier and a bare-bone config
 - client's and server's own tsconfig which extends a base one
 
+**This project uses ESLint and Prettier: don't forget to install/enable their extension in Visual Studio Code.**
+
 ### Bonus
 - There is an example of how to write a HTMX extension
 - Configurations are all in the package.json to remove clutter
-
-## Try it
-
-Some options:
-
-- Download the latest archive from [Github releases](https://github.com/claudioc/fastify-htmx-ts-starter-kit/releases) or from the "Code" button on the repository main page
-- Clone the repo, and then `rm -rf` its `.git` directory (github doesn't support `git archive` and git doesn't have a `export` command like svn does)
-
-- npm i
-- npm run dev
-- open http://localhost:3000
-
-You also have `npm lint`, `npm build` and of course `npm start` (for production).
-
-**This project uses ESLint and Prettier: don't forget to install/enable their extension in Visual Studio Code.**
 
 ## Project structure
 
