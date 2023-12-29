@@ -11,7 +11,7 @@ The kit contains:
 - A client application (no frameworks, just TypeScript)
 - A demo micro application using [HTMX](https://htmx.org/): reads the current server time and displays it in the browser, auto-refreshing every 30s (or manually)
 - Server side error handling (500s and 404s)
-- Linting (via eslint and some plugins)
+- TypeScript linting (via eslint and some plugins)
 - JSX rendering using just TS and [Preact](https://preactjs.com/)
 
 The kit does NOT contain:
@@ -41,6 +41,12 @@ After that, you have to install dependencies using your favourite package manage
 
 You also have `npm lint`, `npm build` and of course `npm start` (for production).
 
+Note that the project uses the (experimental) nodejs' [native watch feature](https://www.jamesqquick.com/blog/using-node-watch-instead-of-nodemon/) to monitor file changes and restart the server (in dev mode only). We don't use `nodemon` but if you cannot use a fairly new version of nodejs (19+) you might need it. Nodemon also preserves the output on subsequent restarts, whereas nodejs --watch does not. To use nodemon, just replace `node --watch-path` with `nodemon -w`.
+
+### Configuration (.env)
+
+If you need to use a `.env` configuration file (not included), we suggest using nodejs >= 20.6, to be [able](https://nodejs.org/en/blog/release/v20.6.0) to read a .env file without using an additional dependency (usually `dotenv`). If you cannot use node 20+, then just install and use `dotenv`.
+
 ## Tech stack
 - [Fastify](https://fastify.dev/)
 - [JSX](https://react.dev/learn/writing-markup-with-jsx) templates
@@ -52,8 +58,6 @@ You also have `npm lint`, `npm build` and of course `npm start` (for production)
 
 ### Additional tools provided
 - concurrently
-- nodemon
-- dotenv
 - prettier and a bare-bone config
 - client's and server's own tsconfig which extends a base one
 
