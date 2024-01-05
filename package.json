@@ -1,6 +1,6 @@
 {
   "name": "fastify-htmx-ts-starter-kit",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Opinionated, no nonsense starter kit for a simple Fastify API + JSX + HTMX application",
   "main": "./dist/app.js",
   "repository": {
