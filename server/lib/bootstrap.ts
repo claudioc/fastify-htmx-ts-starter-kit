@@ -6,7 +6,7 @@ import router from './router';
 import { ASSETS_MOUNT_POINT, ASSETS_PATH } from './constants.js';
 import { PinoLoggerOptions } from 'fastify/types/logger';
 import { NodeEnv } from '../types';
-import jsxRender from './jsxRender';
+import jsxRenderer from './jsxRenderer';
 
 const envToLogger: Record<NodeEnv, PinoLoggerOptions | boolean> = {
   development: {
@@ -25,10 +25,8 @@ const app = Fastify({
     envToLogger[(process.env.NODE_ENV as NodeEnv) || 'development'] ?? true,
 });
 
-app.addHook('preSerialization', jsxRender.preSerialization);
-app.addHook('onSend', jsxRender.onSend);
-
 app
+  .register(jsxRenderer)
   .register(helmet, {
     contentSecurityPolicy: {
       // If you get stuck in CSP, try this: crossOriginEmbedderPolicy: false,
