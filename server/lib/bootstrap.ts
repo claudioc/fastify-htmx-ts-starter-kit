@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import helmet from '@fastify/helmet';
 import staticServe from '@fastify/static';
+import fastifyFormbody from '@fastify/formbody';
 import path from 'path';
 import router from './router';
 import { ASSETS_MOUNT_POINT, ASSETS_PATH } from './constants.js';
@@ -26,6 +27,7 @@ const app = Fastify({
 });
 
 app
+  .register(fastifyFormbody)
   .register(jsxRenderer)
   .register(helmet, {
     contentSecurityPolicy: {
