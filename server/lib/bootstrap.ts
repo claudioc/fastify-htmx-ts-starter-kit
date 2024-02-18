@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import helmet from '@fastify/helmet';
 import staticServe from '@fastify/static';
 import fastifyFormbody from '@fastify/formbody';
+import fastifyFavicon from 'fastify-favicon';
 import path from 'path';
 import router from './router';
 import { ASSETS_MOUNT_POINT, ASSETS_PATH } from './constants.js';
@@ -14,7 +15,7 @@ const envToLogger: Record<NodeEnv, PinoLoggerOptions | boolean> = {
     transport: {
       target: 'pino-pretty',
       options: {
-        ignore: 'pid,hostname,reqId,res',
+        ignore: 'pid,res,req.remoteAddress,req.remotePort,req.hostname',
       },
     },
   },
@@ -27,6 +28,11 @@ const app = Fastify({
 });
 
 app
+  .register(fastifyFavicon, {
+    path: './assets',
+    name: 'favicon.ico',
+    maxAge: 3600,
+  })
   .register(fastifyFormbody)
   .register(jsxRenderer)
   .register(helmet, {
