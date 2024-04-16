@@ -6,17 +6,14 @@ import fastifyFavicon from 'fastify-favicon';
 import path from 'path';
 import router from './router';
 import { ASSETS_MOUNT_POINT, ASSETS_PATH } from './constants.js';
-import { PinoLoggerOptions } from 'fastify/types/logger';
 import { NodeEnv } from '../types';
 import jsxRenderer from './jsxRenderer';
+import { PinoLoggerOptions } from 'fastify/types/logger';
 
 const envToLogger: Record<NodeEnv, PinoLoggerOptions | boolean> = {
   development: {
     transport: {
-      target: 'pino-pretty',
-      options: {
-        ignore: 'pid,res,req.remoteAddress,req.remotePort,req.hostname',
-      },
+      target: '@fastify/one-line-logger',
     },
   },
   production: true,
