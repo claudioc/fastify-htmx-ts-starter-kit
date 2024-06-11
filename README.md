@@ -30,7 +30,7 @@ At the time of writing, **Windows has not been tested as a dev environment**.
 ```sh
 npm create fastify-htmx-ts-app@latest my-app
 # or
-npx fastify-htmx-ts-app@latest my-app
+npx create-fastify-htmx-ts-app@latest my-app
 ```
 
 After that, you have to install dependencies using your favourite package manager (i.e. `npm`) and run some commands:
